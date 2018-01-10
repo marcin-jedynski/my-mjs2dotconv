@@ -29,13 +29,17 @@
 %token BOX_START BOX_END CIRCLE_START CIRCLE_END TRIANGLE_START TRIANGLE_END  DIRECTED NODIRECTED 
 %token <str> TITLE ID RANKDIR
 %%
+commands:	
+	|	root commands 
+	;
 root: node
     |	shape
     |	title
+    | id
     ;
-node:	ID {printf("shape=box, label=\"id\"");}
-    |	ID shape 
-    |	ID TITLE {printf("shape=box, label=\"title\"");}
+node:	id 
+    |	id shape 
+    |	id title {printf("shape=box, label=\"title\"");}
     ;
     
 shape:	BOX_START BOX_END {printf("shape=box");}
@@ -47,5 +51,6 @@ shape:	BOX_START BOX_END {printf("shape=box");}
      ;
 title: TITLE {printf("Title is: %s",$1);}
      ;
-
+id:	ID {printf("shape=box, label=\"id\"");}
+  ;
 %%

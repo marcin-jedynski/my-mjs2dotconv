@@ -12,8 +12,7 @@
 \{	{ECHO;return TRIANGLE_START ;}
 \}	{ECHO;return TRIANGLE_END ;}
 .+	{ECHO;yylval.str = strdup(yytext); return ID;}
-\".+\" 	{ECHO;yylval.str = strdup(yytext); return TITLE ;}
+\".+\"\n 	{ECHO;yylval.str = strdup(yytext); return TITLE ;}
 TB|BT|RL|LR|TD	{ECHO;yylval.str = strdup(yytext); return RANKDIR ;}
-\n|.   	{ECHO; printf(" unexpected\n");}
 %%
 
