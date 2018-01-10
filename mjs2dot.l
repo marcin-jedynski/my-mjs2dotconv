@@ -3,16 +3,22 @@
 %}
 
 %%
---> 	{ECHO;return DIRECTED ;}
--- 	{ECHO;return NODIRECTED ;}
-\[	{ECHO;return BOX_START ;}
-\]	{ECHO;return BOX_END ;}
-\(	{ECHO;return CIRCLE_START ;}
-\)	{ECHO;return CIRCLE_END ;}
-\{	{ECHO;return TRIANGLE_START ;}
-\}	{ECHO;return TRIANGLE_END ;}
-.+	{ECHO;yylval.str = strdup(yytext); return ID;}
-\".+\"\n 	{ECHO;yylval.str = strdup(yytext); return TITLE ;}
-TB|BT|RL|LR|TD	{ECHO;yylval.str = strdup(yytext); return RANKDIR ;}
+graph 	{return GRAPH_START ;}
+--> 	{return DIRECTED ;}
+--- 	{return NODIRECTED ;}
+\[	{return BOX_START ;}
+\]	{return BOX_END ;}
+\(	{return CIRCLE_START ;}
+\)	{return CIRCLE_END ;}
+\{	{return TRIANGLE_START ;}
+\}	{return TRIANGLE_END ;}
+TB|BT|RL|LR|TD	{yylval.str = strdup(yytext); return RANKDIR ;}
+[a-zA-Z0-9]+	{yylval.str = strdup(yytext); return ID;}
+\"[a-zA-Z0-9]+\"\n 	{yylval.str = strdup(yytext); return TITLE ;}
+
+\n	;
+[ \t]+	;
+.	;
+
 %%
 

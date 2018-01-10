@@ -2,6 +2,7 @@
     #include <stdio.h>
     #include <string.h>
 
+	 
     void yyerror(const char *str)
     {
             fprintf(stderr,"error: %s\n",str);
@@ -15,6 +16,7 @@
     int main()
     {
           yyparse();
+	  printf("}");
     }
 
 %}
@@ -26,31 +28,32 @@
 
 
 
-%token BOX_START BOX_END CIRCLE_START CIRCLE_END TRIANGLE_START TRIANGLE_END  DIRECTED NODIRECTED 
+%token BOX_START BOX_END CIRCLE_START CIRCLE_END TRIANGLE_START TRIANGLE_END  DIRECTED NODIRECTED GRAPH_START 
 %token <str> TITLE ID RANKDIR
+%start programs
 %%
-commands:	
-	|	root commands 
+programs:	|programs graph direction path;
+graph:  |GRAPH_START {printf("\ngraph\{\n");};
+direction: |RANKDIR {printf("rankdir=%s\n",$1);};
+path:	| path node edge {printf("\n");}
 	;
-root: node
-    |	shape
-    |	title
-    | id
-    ;
-node:	id 
-    |	id shape 
-    |	id title {printf("shape=box, label=\"title\"");}
+node:	id shape
+    |	id title 
+    |	id 
     ;
     
 shape:	BOX_START BOX_END {printf("shape=box");}
-     |	BOX_START TITLE BOX_END {printf("shape=box, label=\"title\")");}
+     |	BOX_START title BOX_END {printf("shape=box, label=\"title\")");}
      |	CIRCLE_START CIRCLE_END {printf("shape=circle");}
-     |	CIRCLE_START TITLE CIRCLE_END {printf("shape=circle, label=\"title\"");}
+     |	CIRCLE_START title CIRCLE_END {printf("shape=circle, label=\"title\"");}
      |	TRIANGLE_START  TRIANGLE_END {printf("shape=triangle");}
-     |	TRIANGLE_START TITLE TRIANGLE_END {printf("shape=triangle, label=\"title\"");}
+     |	TRIANGLE_START title TRIANGLE_END {printf("shape=triangle, label=\"title\"");}
      ;
-title: TITLE {printf("Title is: %s",$1);}
+title: TITLE {printf("label=%s",$1);}
      ;
-id:	ID {printf("shape=box, label=\"id\"");}
+id:	ID {printf($1);}
   ;
+edge:	NODIRECTED {printf("--");}
+    |	DIRECTED {printf("->");}
+    ;
 %%
