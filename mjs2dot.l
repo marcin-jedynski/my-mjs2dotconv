@@ -2,6 +2,7 @@
 #include "y.tab.h"
 %}
 
+yy_flex_debug= 1;
 %%
 graph 	{return GRAPH_START ;}
 --> 	{return DIRECTED ;}
@@ -13,12 +14,11 @@ graph 	{return GRAPH_START ;}
 \{	{return TRIANGLE_START ;}
 \}	{return TRIANGLE_END ;}
 TB|BT|RL|LR|TD	{yylval.str = strdup(yytext); return RANKDIR ;}
+\"[a-zA-Z0-9]+\" 	{yylval.str = strdup(yytext); return TITLE ;}
 [a-zA-Z0-9]+	{yylval.str = strdup(yytext); return ID;}
-\"[a-zA-Z0-9]+\"\n 	{yylval.str = strdup(yytext); return TITLE ;}
 
 \n	;
 [ \t]+	;
-.	;
 
 %%
 
