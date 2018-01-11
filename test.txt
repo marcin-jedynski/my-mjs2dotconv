@@ -1,3 +1,5 @@
 graph LR
-a["dupa"]---b
+a["nodeA"]---b["nodeB"]
+d{"nodeD"}---b
+e("nodeE")---b
 c---d

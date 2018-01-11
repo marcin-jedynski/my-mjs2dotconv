@@ -13,6 +13,6 @@ yacc: mjs2dot.y
 compile: lex.yy.c y.tab.c
 	gcc -Wno-all lex.yy.c y.tab.c -o run.out
 test: run.out test.txt 
-	./run.out < test.txt
+	./run.out < test.txt > result.txt
 clean: 
 	rm lex.yy.c run.out y.tab.c y.tab.h

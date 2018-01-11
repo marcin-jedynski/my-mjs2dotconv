@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <string.h>
+char *lastValue="";
 	int yydebug=1;
 	void yyerror(const char *str)
 	{
@@ -14,8 +15,9 @@
 
 	int main()
 	{
+
 	 yyparse();
-     	 printf("}");
+     	 printf("}\n");
 	}
 
 %}
@@ -27,31 +29,33 @@
 
 
 
-%token BOX_START BOX_END CIRCLE_START CIRCLE_END TRIANGLE_START TRIANGLE_END  DIRECTED NODIRECTED GRAPH_START 
+%token BOX_START BOX_END OVAL_START OVAL_END DIAMOND_START DIAMOND_END  DIRECTED NODIRECTED GRAPH_START 
 %token <str> TITLE ID RANKDIR
 %start programs
 %%
-programs:	|programs graph direction path;
-graph:	|GRAPH_START {printf("\ngraph\{\n");};
-direction:	|RANKDIR {printf("rankdir=%s\n",$1);};
-path:	node edge node {printf("\n");}
+programs:	| programs graph direction path;
+graph:	| GRAPH_START {printf("\ngraph\{\n");};
+direction:	| RANKDIR {printf("rankdir=%s;\n",$1);};
+path:	node1st edge node2nd {printf("\n");}
 	;
-node:	id shape
-    |	id title 
-    |	id 
-    ;
-    
-shape:	BOX_START BOX_END {printf("shape=box");}
+node1st:	id1stShape shape {printf(";\n%s",lastValue);}
+       |	id1st;
+node2nd:	id2ndShape shape {printf(";");}
+       |	id2nd
+       ;
+shape:	BOX_START BOX_END {printf("[shape=box]");}
      |	BOX_START title BOX_END {printf("shape=box]");}
-     |	CIRCLE_START CIRCLE_END {printf("shape=circle");}
-     |	CIRCLE_START title CIRCLE_END {printf("shape=circle, label=\"title\"");}
-     |	TRIANGLE_START  TRIANGLE_END {printf("shape=triangle");}
-     |	TRIANGLE_START title TRIANGLE_END {printf("shape=triangle, label=\"title\"");}
+     |	OVAL_START OVAL_END {printf("shape=oval");}
+     |	OVAL_START title OVAL_END {printf("shape=oval]");}
+     |	DIAMOND_START  DIAMOND_END {printf("shape=diamond");}
+     |	DIAMOND_START title DIAMOND_END {printf("shape=diamond]");}
      ;
 title: TITLE {printf("[label=%s ",$1);}
      ;
-id:	ID {printf($1);}
-  ;
+id1st:	ID {printf("%s",$1);lastValue = malloc(sizeof(char)*strlen(yylval.str)); strcpy(lastValue, yylval.str);};
+id1stShape:	ID {printf($1);lastValue = malloc(sizeof(char)*strlen(yylval.str)); strcpy(lastValue, yylval.str);};
+id2nd:	ID {printf("%s;",$1);lastValue = malloc(sizeof(char)*strlen(yylval.str)); strcpy(lastValue, yylval.str);};
+id2ndShape:	ID {printf("%s;\n%s",$1,$1);lastValue = malloc(sizeof(char)*strlen(yylval.str)); strcpy(lastValue, yylval.str);};
 edge:	NODIRECTED {printf("--");}
     |	DIRECTED {printf("->");}
     ;
