@@ -1,4 +1,4 @@
-all: flex yacc compile start
+all: flex yacc compile start present
 
 debug: flex-d yacc-d compile test
 
@@ -13,7 +13,9 @@ yacc: mjs2dot.y
 compile: lex.yy.c y.tab.c
 	gcc -Wno-all lex.yy.c y.tab.c -o run.out
 start: run.out test.txt 
-	./run.out < test.txt > result.txt; cat result.txt
+	./run.out < test.txt > result.txt
+present: test.txt result.txt
+	echo -e '\nINPUT(MermaidJS):';cat test.txt;echo -e '\nOUTPUT(Graphviz):';cat result.txt
 test: run.out test.txt
 	./run.out < test.txt 
 clean: 
