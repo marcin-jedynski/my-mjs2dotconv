@@ -7,6 +7,8 @@ yy_flex_debug= 1;
 graph 	{return GRAPH_START ;}
 --> 	{return DIRECTED ;}
 --- 	{return NODIRECTED ;}
+=== 	{return NODIRECTED_BOLD ;}
+-.- 	{return NODIRECTED_DOTTED ;}
 \[	{return BOX_START ;}
 \]	{return BOX_END ;}
 \(	{return OVAL_START ;}

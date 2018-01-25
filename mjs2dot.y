@@ -29,15 +29,17 @@ char *lastValue="";
 
 
 
-%token BOX_START BOX_END OVAL_START OVAL_END DIAMOND_START DIAMOND_END  DIRECTED NODIRECTED GRAPH_START 
+%token BOX_START BOX_END OVAL_START OVAL_END DIAMOND_START DIAMOND_END  DIRECTED NODIRECTED GRAPH_START NODIRECTED_DOTTED NODIRECTED_BOLD 
 %token <str> TITLE ID RANKDIR
 %start programs
 %%
-programs:	| programs graph direction path;
+programs:	| programs graph direction path|path_bold|path_dotted;
 graph:	| GRAPH_START {printf("\ngraph\{\n");};
 direction:	| RANKDIR {printf("rankdir=%s;\n",$1);};
-path:	node1st edge node2nd {printf("\n");}
-	;
+path_dotted:	node1st edgeDotted node2nd {printf("[style=bold]\n");};
+path_bold:	node1st edgeBold node2nd {printf("[style=dotted]\n");};
+path:	node1st edge node2nd {printf("\n");};
+	
 node1st:	id1stShape shape {printf(";\n%s",lastValue);}
        |	id1st;
 node2nd:	id2ndShape shape {printf(";");}
@@ -59,4 +61,6 @@ id2ndShape:	ID {printf("%s;\n%s",$1,$1);lastValue = malloc(sizeof(char)*strlen(y
 edge:	NODIRECTED {printf("--");}
     |	DIRECTED {printf("->");}
     ;
+edgeBold: NODIRECTED_BOLD {printf("--");};
+edgeDotted:NODIRECTED_DOTTED {printf("--");};
 %%

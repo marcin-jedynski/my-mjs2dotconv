@@ -1,5 +1,5 @@
 graph LR
 a["nodeA"]---b["nodeB"]
-d{"nodeD"}---b
-e("nodeE")---b
+d{"nodeD"}===b
+e("nodeE")-.-b
 c---d
